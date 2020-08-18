@@ -1,6 +1,7 @@
-import urllib
+import urllib.parse
+import urllib.request
 import datetime
-import dateutil
+import dateutil.parser
 import json
 
 class BaseModel(object):
@@ -43,9 +44,9 @@ class BaseModel(object):
             'start_dt': start_dt.isoformat(),
             'end_dt': end_dt.isoformat()
         })
-        api_base = 'https://api.agralogics.com/weather/%(res)/?%(params)' % (res, query_params)
-        req = urllib.request.Request(api_base)
-        req.add_header('Agls-Api-Key', self.agls_api_key)
+        url = 'https://api.agralogics.com/weather/%s/?%s' % (res, query_params)
+        headers = { 'Agls-Api-Key': self.agls_api_key }
+        req = urllib.request.Request(url, headers=headers)
         response_raw = urllib.request.urlopen(req).read().decode('utf-8')
         response_json = json.loads(response_raw)
 
