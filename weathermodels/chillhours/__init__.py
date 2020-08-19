@@ -1,1 +1,1 @@
-from .models import ChillModelUtah
+from .models import ChillDictModel, ChillModelUtah

@@ -13,7 +13,7 @@ class BaseModel(object):
         self.agls_api_key = agls_api_key
 
 
-    def get_data(self, lat=None, lon=None, start_dt=None, end_dt=None, res='hourly'):
+    def get_data(self, lat=None, lon=None, start_dt=None, end_dt=None, res='hourly', include=None):
         float_lat = float(lat)
         float_lon = float(lon)
 
@@ -38,12 +38,20 @@ class BaseModel(object):
         if not self.agls_api_key:
             raise AssertionError('An Agralogics API Key is required to retrieve data from the Agralogics API')
 
-        query_params = urllib.parse.urlencode({
+        query_params_dict = {
             'lat': lat,
             'lon': lon,
             'start_dt': start_dt.isoformat(),
             'end_dt': end_dt.isoformat()
-        })
+        }
+
+        if include:
+            if not isinstance(include, list):
+                raise TypeError('Included fields must be passed as a list')
+            include_str = ','.join(include)
+            query_params_dict['include'] = include_str
+
+        query_params = urllib.parse.urlencode(query_params_dict)
         url = 'https://api.agralogics.com/weather/%s/?%s' % (res, query_params)
         headers = { 'Agls-Api-Key': self.agls_api_key }
         req = urllib.request.Request(url, headers=headers)
