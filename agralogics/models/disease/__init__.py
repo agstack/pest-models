@@ -1,1 +1,0 @@
-from .powderymildew import PowderyMildewGrapes

@@ -1,4 +1,4 @@
-from models.base.BaseModel import BaseModel
+from agralogics.models.base import BaseModel
 
 
 class ChillDictModel(BaseModel):

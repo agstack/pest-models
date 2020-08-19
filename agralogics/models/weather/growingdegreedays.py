@@ -1,4 +1,5 @@
-from models.base.BaseModel import BaseModel
+from agralogics.models.base import BaseModel
+
 
 class GrowingDegreeDaysModel(BaseModel):
     def calculate(self, lat=None, lon=None, start_dt=None, end_dt=None, upper_threshold=None, lower_threshold=None):
