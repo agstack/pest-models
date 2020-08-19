@@ -4,11 +4,11 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="weather-models", # Replace with your own username
+    name="agralogics", # Replace with your own username
     version="0.0.1",
     author="Agralogics",
     author_email="nikhil.suri@agralogics.com",
-    description="An Open Source Collection of Weather Models",
+    description="An Open Source Collection of Agronomic Models",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/agralogics/weather-models",

@@ -1,4 +1,4 @@
-from weathermodels.base import BaseModel
+from models.base.BaseModel import BaseModel
 
 
 class ChillDictModel(BaseModel):
@@ -19,8 +19,8 @@ class ChillDictModel(BaseModel):
                 return temp_value
 
 
-    def calculate_chill_hours(self, lat, lon, start_dt, end_dt):
-        data = self.get_data(lat, lon, start_dt, end_dt, include=['air_temperature'])
+    def calculate(self, lat=None, lon=None, start_dt=None, end_dt=None):
+        data = self.get_data(lat=lat, lon=lon, start_dt=start_dt, end_dt=end_dt, include=['air_temperature'])
         hourly_data = data['hourly']
         chill_hours = 0
         for data in hourly_data:

@@ -13,7 +13,7 @@ class BaseModel(object):
         self.agls_api_key = agls_api_key
 
 
-    def get_data(self, lat=None, lon=None, start_dt=None, end_dt=None, res='hourly', include=None):
+    def get_data(self, lat=None, lon=None, start_dt=None, end_dt=None, res='hourly', include=None, units='imperial'):
         float_lat = float(lat)
         float_lon = float(lon)
 
@@ -35,6 +35,9 @@ class BaseModel(object):
         if res not in ['hourly', 'daily']:
             raise ValueError('Data resolution must be either \'hourly\' or \'daily\'')
 
+        if units not in ['imperial', 'metric']:
+            raise ValueError('Units must be either \'imperial\' or \'metric\'')
+
         if not self.agls_api_key:
             raise AssertionError('An Agralogics API Key is required to retrieve data from the Agralogics API')
 
@@ -42,7 +45,8 @@ class BaseModel(object):
             'lat': lat,
             'lon': lon,
             'start_dt': start_dt.isoformat(),
-            'end_dt': end_dt.isoformat()
+            'end_dt': end_dt.isoformat(),
+            'units': units
         }
 
         if include:
