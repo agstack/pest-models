@@ -13,7 +13,7 @@ class BaseModel(object):
         self.agls_api_key = agls_api_key
 
 
-    def get_data(self, lat=None, lon=None, start_dt=None, end_dt=None, res='hourly', include=None, units='imperial'):
+    def get_hourly_data(self, lat=None, lon=None, start_dt=None, end_dt=None, res='hourly', include=None, units='imperial'):
         float_lat = float(lat)
         float_lon = float(lon)
 

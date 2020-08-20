@@ -40,7 +40,7 @@ class CART_SLD(BaseModel):
 
 
     def calculate(self, lat=None, lon=None, start_dt=None, end_dt=None):
-        data = self.get_data(lat=lat, lon=lon, start_dt=start_dt, end_dt=end_dt, include=[
+        data = self.get_hourly_data(lat=lat, lon=lon, start_dt=start_dt, end_dt=end_dt, include=[
             'air_temperature',
             'dew_point',
             'relative_humidity',
