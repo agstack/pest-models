@@ -176,13 +176,23 @@ class PowderyMildewGrapes(BaseModel):
                 # check conditions 2 - 7
                 date = hourly_data[hourly_data_base_i]['timestamp'].split('T')[0]
                 day_hours = hourly_data[hourly_data_base_i:hourly_data_base_i + 24]
+
+                daily_increment = 0
                 current_day_check = has_6_consecutive_hours(day_hours)
                 if current_day_check:
-                    conidial_index += 20
-                    if has_gt_95(day_hours):
-                        conidial_index -= 10
+                    daily_increment += 20
                 else:
-                    conidial_index -= 10
+                    daily_increment -= 10
+
+                if has_gt_95(day_hours):
+                    daily_increment -= 10
+
+                if daily_increment > 20:
+                    daily_increment = 20
+                elif daily_increment < -10:
+                    daily_increment = -10
+
+                conidial_index += daily_increment
 
                 if conidial_index < 0:
                     conidial_index = 0
