@@ -147,65 +147,68 @@ class PowderyMildewGrapes(BaseModel):
         day_acc = []
         conidial_index = 0
         conidial_start = False
-        for i in range(int(len(hourly_data) / 24 - 3)):
+        num_days = int(len(hourly_data) / 24)
+        i = 0
+        while i < num_days - 3:
             hourly_data_base_i = 24 * i
+            # see if there are 6 consecutive hours on this day
+            current_day_check = has_6_consecutive_hours(hourly_data[hourly_data_base_i:hourly_data_base_i + 24])
+            if current_day_check:
+                next_day_check = has_6_consecutive_hours(hourly_data[hourly_data_base_i + 24:hourly_data_base_i + 48])
+                if next_day_check:
+                    final_day_check = has_6_consecutive_hours(hourly_data[hourly_data_base_i + 48:hourly_data_base_i + 72])
+                    if final_day_check:
+                        conidial_start = True
 
-            if not conidial_start:
-                # see if there are 6 consecutive hours on this day
-                current_day_check = has_6_consecutive_hours(hourly_data[hourly_data_base_i:hourly_data_base_i + 24])
-                if current_day_check:
-                    next_day_check = has_6_consecutive_hours(hourly_data[hourly_data_base_i + 24:hourly_data_base_i + 48])
-                    if next_day_check:
-                        final_day_check = has_6_consecutive_hours(hourly_data[hourly_data_base_i + 48:hourly_data_base_i + 72])
-                        if final_day_check:
-                            conidial_start = True
+                        conidial_start_date = hourly_data[hourly_data_base_i]['timestamp'].split('T')[0]
+                        conidial_next_date = hourly_data[hourly_data_base_i + 24]['timestamp'].split('T')[0]
+                        conidial_final_date = hourly_data[hourly_data_base_i + 48]['timestamp'].split('T')[0]
 
-                            conidial_start_date = hourly_data[hourly_data_base_i]['timestamp'].split('T')[0]
-                            conidial_next_date = hourly_data[hourly_data_base_i + 24]['timestamp'].split('T')[0]
-                            conidial_final_date = hourly_data[hourly_data_base_i + 48]['timestamp'].split('T')[0]
+                        day_acc.extend([
+                            (conidial_start_date, 20),
+                            (conidial_next_date, 40),
+                            (conidial_final_date, 60)
+                        ])
 
-                            day_acc.extend([
-                                (conidial_start_date, 20),
-                                (conidial_next_date, 40),
-                                (conidial_final_date, 60)
-                            ])
-
-                            conidial_index += 60
-                            i += 2
-            else:
-                # check conditions 2 - 7
-                date = hourly_data[hourly_data_base_i]['timestamp'].split('T')[0]
-                day_hours = hourly_data[hourly_data_base_i:hourly_data_base_i + 24]
-
-                daily_increment = 0
-                current_day_check = has_6_consecutive_hours(day_hours)
-                if current_day_check:
-                    daily_increment += 20
-                else:
-                    daily_increment -= 10
-
-                if has_gt_95(day_hours):
-                    daily_increment -= 10
-
-                if daily_increment > 20:
-                    daily_increment = 20
-                elif daily_increment < -10:
-                    daily_increment = -10
-
-                conidial_index += daily_increment
-
-                if conidial_index < 0:
-                    conidial_index = 0
-
-                if conidial_index > 100:
-                    conidial_index = 100
-
-                day_acc.append((date, conidial_index))
+                        conidial_index += 60
+                        i += 3
+                        break
 
             i += 1
 
         if not conidial_start:
             return None
+
+        for j in range(i, num_days):
+            # check conditions 2 - 7
+            hourly_data_base_j = 24 * j
+            date = hourly_data[hourly_data_base_j]['timestamp'].split('T')[0]
+            day_hours = hourly_data[hourly_data_base_j:hourly_data_base_j + 24]
+
+            daily_increment = 0
+            current_day_check = has_6_consecutive_hours(day_hours)
+            if current_day_check:
+                daily_increment += 20
+            else:
+                daily_increment -= 10
+
+            if has_gt_95(day_hours):
+                daily_increment -= 10
+
+            if daily_increment > 20:
+                daily_increment = 20
+            elif daily_increment < -10:
+                daily_increment = -10
+
+            conidial_index += daily_increment
+
+            if conidial_index < 0:
+                conidial_index = 0
+
+            if conidial_index > 100:
+                conidial_index = 100
+
+            day_acc.append((date, conidial_index))
 
         recommendations = {
             'low': [

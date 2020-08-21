@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="agralogics", # Replace with your own username
-    version="1.0.3",
+    name="agralogics",
+    version="1.0.4",
     author="Agralogics",
     author_email="nikhil.suri@agralogics.com",
     description="An Open Source Collection of Agronomic Models",
