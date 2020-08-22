@@ -25,7 +25,8 @@ class ChillDictModel(BaseModel):
         chill_hours = 0
         for data in hourly_data:
             air_temperature = data['air_temperature']
-            increment = self.get_chill_increment(air_temperature)
+            air_temperature_fahrenheit = self.convert_to_fahrenheit(air_temperature)
+            increment = self.get_chill_increment(air_temperature_fahrenheit)
             chill_hours += increment
 
         return chill_hours

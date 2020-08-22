@@ -45,7 +45,7 @@ class CART_SLD(BaseModel):
             'dew_point',
             'relative_humidity',
             'wind_speed'
-        ], units='metric')
+        ])
 
         hourly_data = data['hourly']
         lwd = 0

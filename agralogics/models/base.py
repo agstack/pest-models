@@ -13,7 +13,14 @@ class BaseModel(object):
         self.agls_api_key = agls_api_key
 
 
-    def get_hourly_data(self, lat=None, lon=None, start_dt=None, end_dt=None, res='hourly', include=None, units='imperial'):
+    def convert_to_fahrenheit(self, air_temperature):
+        return air_temperature * 1.8 + 32
+
+
+    def get_hourly_data(self, lat=None, lon=None, start_dt=None, end_dt=None, res='hourly', include=None, system=None):
+        if not self.agls_api_key:
+            raise AssertionError('An Agralogics API Key is required to retrieve data from the Agralogics API')
+
         float_lat = float(lat)
         float_lon = float(lon)
 
@@ -35,19 +42,18 @@ class BaseModel(object):
         if res not in ['hourly', 'daily']:
             raise ValueError('Data resolution must be either \'hourly\' or \'daily\'')
 
-        if units not in ['imperial', 'metric']:
-            raise ValueError('Units must be either \'imperial\' or \'metric\'')
-
-        if not self.agls_api_key:
-            raise AssertionError('An Agralogics API Key is required to retrieve data from the Agralogics API')
-
         query_params_dict = {
             'lat': lat,
             'lon': lon,
             'start_dt': start_dt.isoformat(),
-            'end_dt': end_dt.isoformat(),
-            'units': units
+            'end_dt': end_dt.isoformat()
         }
+
+        if system is not None:
+            if system in ['cimis', 'noaa']:
+                query_params_dict['system'] = system
+            else:
+                raise ValueError('Weather system must be either \'cimis\' or \'noaa\'')
 
         if include:
             if not isinstance(include, list):

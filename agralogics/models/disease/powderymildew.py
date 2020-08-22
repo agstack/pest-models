@@ -102,7 +102,7 @@ class PowderyMildewGrapes(BaseModel):
         i = 0
         temp_sum = 0
         while i < len(hourly_data):
-            temp_sum += hourly_data[i]['air_temperature']
+            temp_sum += self.convert_to_fahrenheit(hourly_data[i]['air_temperature'])
 
             if (i + 1) % 24 == 0:
                 temp_avg = temp_sum / 24
@@ -131,7 +131,7 @@ class PowderyMildewGrapes(BaseModel):
             # see if there are 6 consecutive hours of temp between 70 and 85
             for i in range(len(day_data) - 6):
                 for j in range(0, 6):
-                    temp = day_data[i + j]['air_temperature']
+                    temp = self.convert_to_fahrenheit(day_data[i + j]['air_temperature'])
                     if temp < 70 or temp > 85:
                         break
                 return True
@@ -139,7 +139,7 @@ class PowderyMildewGrapes(BaseModel):
 
         def has_gt_95(day_data):
             for d in day_data:
-                if d['air_temperature'] >= 95:
+                if self.convert_to_fahrenheit(d['air_temperature']) >= 95:
                     return True
             return False
 
