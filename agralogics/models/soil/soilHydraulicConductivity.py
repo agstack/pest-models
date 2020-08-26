@@ -1,10 +1,10 @@
 import dateutil.parser
 import datetime
 
-from agralogics.models.base import BaseModel
+from agralogics.models.base import BaseSoilGridsModel
 from agralogics.models.weather.leafwetnessduration import CART_SLD
 
-class PowderyMildewGrapes(BaseModel):
+class soilHydraulicConductivity(BaseSoilGridsModel):
     """
     Model reference: http://ipm.ucanr.edu/DISEASE/DATABASE/grapepowderymildew.html
     Reference Image: http://ipm.ucanr.edu/PMG/IMAGES/U/D-GR-UNEC-FO.002.jpg
