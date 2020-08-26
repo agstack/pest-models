@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="agralogics",
-    version="1.0.5",
+    version="1.0.8",
     author="Agralogics",
-    author_email="nikhil.suri@agralogics.com",
+    author_email="sumer.johal@agralogics.com",
     description="An Open Source Collection of Agronomic Models",
     long_description=long_description,
     long_description_content_type="text/markdown",
